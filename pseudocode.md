@@ -20,6 +20,7 @@ input: cols 2, 4, 6
 check_start(0, 500, 10S40M)
 return: start position: 490
 ```
+
 ```
 High-Level Steps
 Initialize data structures to keep track of processed reads and UMIs.
@@ -30,6 +31,7 @@ If the read is unique, write it to the output SAM file and mark the UMI as proce
 Repeat for each line in the input SAM file.
 Close the input and output files.
 ```
+
 Pseudocode
 
 ```
