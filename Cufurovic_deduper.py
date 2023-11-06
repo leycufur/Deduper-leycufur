@@ -57,43 +57,6 @@ def adjust_start_position(flag, position, cigar_string):
                 position += int(cigar_pattern[i][0])
         return position
         
-# print(adjust_start_position(16, 100, "10M10S20D"))
-              
-
-    #     elif pattern == 'S' and i != 0 and check_bitwise_flag(flag) == "reverse":
-    #     elif pattern in ['M', 'N', 'D', 'S'] and check_bitwise_flag(flag) == "reverse":
-    #         position += int(length)
-    # return position
-
-# def fwd_adjust_start_position(flag, position, cigar_string):
-#     cigar_pattern = re.findall(r'(\d+)([MDNS])', cigar_string)
-#     for length, pattern in cigar_pattern:
-#         if pattern == 'S':
-#             soft_clipping_length = int(length)
-#             if check_bitwise_flag(flag) == "forward":
-#                 position -= soft_clipping_length
-#     return position
-
-# def rvs_adjust_start_position(flag, position, cigar_string):
-#     cigar_pattern = re.findall(r'(\d+)([MDNS])', cigar_string)
-#     for length, pattern in cigar_pattern:
-#         if pattern == 'M'
-
-
-# cigar_pattern_regex = re.compile(r'(\d+)([MDNS])')
-# def adjust_start_position(flag, position, cigar_string):
-#     cigar_pattern = cigar_pattern_regex.findall(cigar_string)
-#     for length, pattern in cigar_pattern:
-#         if pattern == 'S':
-#             soft_clipping_length = int(length)
-#             if check_bitwise_flag(flag) == "forward":
-#                 position -= soft_clipping_length
-#             elif check_bitwise_flag(flag) == "reverse":
-#                 position += soft_clipping_length
-#     return position
-
-
-
 
 UMI_list = []
 def main():
