@@ -1,66 +1,53 @@
+
 # Deduper
 
-## Part 1
-Use this repo template to create your own Deduper repo - you should do all your work in your own repository. Please name it `Deduper-<github-user-name>`.
+## Overview
+The Deduper script is designed to efficiently remove PCR duplicates from sorted SAM files containing single-end reads. It processes files while managing memory use effectively to handle large datasets, such as those commonly found in genomic studies.
 
-Write up a strategy for writing a Reference Based PCR Duplicate Removal tool. That is, given a sorted sam file of uniquely mapped reads, remove all PCR duplicates (retain only a single copy of each read). Develop a strategy that avoids loading everything into memory. You should not write any code for this portion of the assignment. Be sure to:
-- Define the problem
-- Write examples:
-    - Include a properly formated sorted input sam file
-    - Include a properly formated expected output sam file
-- Develop your algorithm using pseudocode
-- Determine high level functions
-    - Description
-    - Function headers
-    - Test examples (for individual functions)
-    - Return statement
-    
-For this portion of the assignment, you should design your algorithm for single-end data, with 96 UMIs. UMI information will be in the QNAME, like so: ```NS500451:154:HWKTMBGXX:1:11101:15364:1139:GAACAGGT```. Discard any UMIs with errors (or think about how you might error correct, if you're feeling ambitious).
+## Features
+- **UMI Support**: Works with user-provided lists of UMIs to accurately identify unique reads.
+- **CIGAR String Adjustment**: Adjusts read positions based on CIGAR strings to accurately determine duplicates, accounting for soft clipping and other modifications.
+- **Bitwise Flag Check**: Determines the orientation (forward or reverse) of reads to ensure accurate deduplication.
+- **Performance Metrics**: Outputs statistics on total reads processed, number of unique reads, duplicates, and unknown UMIs.
 
-## Part 2
-An important part of writing code is reviewing code - both your own and other's. In this portion of the assignment, you will be assigned 3 students' pseudocode algorithms to review. Be sure to evaluate the following points:
-- Does the proposed algorithm make sense to you? Can you follow the logic?
-- Does the algorithm do everything it's supposed to do? (see part 1)
-- Are proposed functions reasonable? Are they "standalone" pieces of code?
+## Requirements
+- Python 3.11.5 or higher
 
-You can find your assigned reviewees on Canvas. You can find your fellow students' repositories at 
+## Installation
+Clone the repository and navigate into the directory:
+```bash
+git clone https://github.com/<your-github-username>/Deduper-<your-github-username>.git
+cd Deduper-<your-github-username>
 ```
-github.com/<user>/Deduper-<github-user-name>
+
+## Usage
+To run the Deduper script, use the following command:
+```bash
+./<your_last_name>_deduper.py -u <umi_file.txt> -f <input_sorted.sam> -o <output_deduped.sam>
 ```
-Be sure to leave comments on their repositories by creating issues or by commenting on the pull request.
+### Command-line Arguments
+- `-f, --file`: Specifies the absolute file path to the sorted SAM file.
+- `-o, --output`: Specifies the absolute file path to output the deduplicated SAM file.
+- `-u, --umi`: Specifies the file containing the list of UMIs.
+- `-h, --help`: Displays help information.
 
-## Part 3
-Write your deduper function!
+## Function Descriptions
+- **`get_args()`**: Parses command-line arguments using argparse.
+- **`make_umi_list(umi_file)`**: Reads UMIs from a file and stores them in a list for quick access.
+- **`check_bitwise_flag(flag)`**: Checks the bitwise flag from the SAM file to determine the read's strand.
+- **`adjust_start_position(flag, position, cigar_string)`**: Adjusts the start position of a read considering its CIGAR string and strand orientation.
 
-Given a SAM file of uniquely mapped reads, and a text file containing the known UMIs, remove all PCR duplicates (retain only a single copy of each read). Remember:
-- Your Python code can assume a sorted sam file (you *might* need to use `samtools sort` outside of your Python script)
-- Account for: 
-    - all possible CIGAR strings (including adjusting for soft clipping, etc.)
-    - Strand
-    - Single-end reads
-    - Known UMIs
-- Considerations:
-    - Millions of reads – avoid loading everything into memory!
-    - Be sure to utilize functions appropriately
-    - Appropriately comment code and include doc strings
-- **CHALLENGE**: In a **separate branch**, implement options for
-    - Single-end vs paired-end
-    - Known UMIs vs randomers
-    - Error correction of known UMIs
-    - Choice of duplicate written to file
-    
-You MUST:
-- Write Python 3.11 compatible code
-- Include the following argparse options
-    - ```-f```, ```--file```: designates absolute file path to sorted sam file
-    - ```-o```, ```--outfile```: designates absolute file path to sorted sam file
-    - ```-u```, ```--umi```: designates file containing the list of UMIs
-    - ```-h```, ```--help```: prints a USEFUL help message (see argparse docs)
-        - That is, your code must be able to run (in a single step) if given a command in the format:
-          ```
-          ./<your_last_name>_deduper.py -u STL96.txt -f <in.sam> -o <out.sam>
-          ```
-- Output the first read encountered if duplicates are found
-- Output a properly formatted SAM file
-- Name your python script ```<your_last_name>_deduper.py``` and place it in the top level of your repo (that is, not inside a folder)
+## Example Input and Output
+**Input (SAM format)**:
+```
+@header_line
+NS500451:154:HWKTMBGXX:1:11101:10000:1000 16 chr1 3000001 60 50M * 0 0 ...
+```
+**Output (SAM format)**:
+```
+@header_line
+NS500451:154:HWKTMBGXX:1:11101:10000:1000 16 chr1 3000001 60 50M * 0 0 ...
+```
 
+## Contributing
+Contributions are welcome! Please fork the repository and submit pull requests, or create issues for bugs and feature requests.
